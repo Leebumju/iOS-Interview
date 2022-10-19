@@ -27,6 +27,7 @@ Bounds와 Frame은 모두 CGRect 타입이며 origin 즉 원점을 나타내는 
 Bounds는 자신만의 좌표시스템에서의 View의 위치와 크기 값이고 origin은 디폴트로 (0,0)으로 설정되어 있으며 주로 View내부에 그림을 그릴 때 (drawRect) 사용합니다.
 Frame은 superView(한 단계 상위 뷰)의 좌표시스템안에서 view의 위치와 크기 값이고 주로 View의 위치나 크기를 설정하는 경우 사용합니다.
 
+-------------
 <br>
 
 - 실제 디바이스가 없을 경우 개발 환경에서 할 수 있는 것과 없는 것을 설명하시오.
@@ -34,12 +35,14 @@ Frame은 superView(한 단계 상위 뷰)의 좌표시스템안에서 view의 �
 
 시뮬레이터는 Mac에서 실행되는 앱이기 때문에 CPU, 메모리 및 네트워크 연결을 비롯한 컴퓨터 리소스에 액세스할 수 있지만 실제 디바이스의 메모리 및 네트워크 속도와 다르기 때문에 실제 디바이스가 없다면 정확한 성능 테스트를 할 수 없습니다. 실제 맥에서는 부드럽게 실행되던 앱이 실제 디바이스로 테스트했을 때는 부드럽지 않을 수도 있습니다. 그리고 페이스 아이디를 이용할 때 직접 얼굴인식은 안되지만 인식됨, 안됨 처리를 해볼 수는 있습니다. 하드웨어 적으로는 가속도, 가압계, 주변광, GPS 등 여러 센서 기능을 이용할 수가 없습니다. 또한 카메라, 마이크, 전화 기능도 사용할 수 없고, 마우스로 시뮬레이터를 터치하기 때문에 두 손가락으로 하는 줌 아웃 등의 기능을 테스트 할 수 없습니다. API 측면에서도 Apple의 푸시 알림 받기와 보내기를 지원하지 않습니다.
 
+-------------
 <br>
 
 - 앱의 콘텐츠나 데이터 자체를 저장/보관하는 특별한 객체를 무엇이라고 하는가?
 
 Core data
 
+-------------
 <br>
 
 - 앱 화면의 콘텐츠를 표시하는 로직과 관리를 담당하는 객체를 무엇이라고 하는가?
@@ -51,6 +54,7 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 앱에서 다른 ViewController를 포함한 다른객체들과 조정을 한다
 데이터가 변경되면 뷰의 콘텐츠를 업데이트할 수 있다
 
+-------------
 <br>
 
 - App thinning에 대해서 설명하시오.
@@ -73,13 +77,18 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 필요할 때만 다운로드 받을 수 있다
 예를 들어 체험판 -> 본판 or 게임에서 저레벨에서 고레벨로 갈 때
 
+-------------
 <br>
 
 ###
 - 앱이 시작할 때 main.c 에 있는 UIApplicationMain 함수에 의해서 생성되는 객체는 무엇인가?
+
+-------------
 <br>
 
 - @Main에 대해서 설명하시오.
+
+-------------
 <br>
 
 - 앱이 foreground에 있을 때와 background에 있을 때 어떤 제약사항이 있나요?
@@ -87,24 +96,31 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 Foreground에 있을 때에는 메모리 및 기타 시스템 리소스에 대해서 background보다 높은 우선순위를 가지며 시스템은 이러한 리소스를 사용할 수 있도록 필요에 따라 background 앱을 종료합니다
 Background에 있을 때에는 가능한 적은 메모리 공간을 사용해야하며 자원 할당에 있어 foreground 상태 보다 우선순위가 낮습니다
 
-
+-------------
 <br>
 
 - 상태 변화에 따라 다른 동작을 처리하기 위한 앱델리게이트 메서드들을 설명하시오.
 
 상태변화에 따른 앱딜리게이트 메서드는,
+
 애플리케이션이 실행된 직후 사용자의 화면에 보여지기 직전에 호출 되는 application메서드가 있고,
+
 애플리케이션이 최초 실행될 때 호출되는 application 메서드,
 
+
 13.0이후 scenedelegate메서드로 바뀜..? (4가지)
+
 애플리케이션이 InActive 상태로 전환되기 직전에 호출되는 applicationWillResignActive,
+
 애플리케이션이 백그라운드 상태로 전환된 뒤 호출되는 applicationDidEnterBackground,
+
 애플리케이션이 Active상태가 되기 전에 호출되는 applicationWillEnterForeground,
+
 애플리케이션이 Active상태로 전환된 후 호출하는 applicationDidBecomeActive,
 
 애플리케이션이 종료되기 직전에 호출되는 applicationWillTerminate메서드 등이 있습니다.
 
-
+-------------
 <br>
 
 - 앱이 In-Active 상태가 되는 시나리오를 설명하시오.
@@ -112,29 +128,35 @@ Background에 있을 때에는 가능한 적은 메모리 공간을 사용해야
 전화나 메시지 같은 인터럽트가 발생하거나, 미리알림 같은 특정 알림창이 화면을 덮어서 앱이 실질적으로 event를 받지 못하는 상태 In-Active 상태가 된다.
 앱을 처음켜거나, foreground에서 background, background에서 foreground 상태가 될 때도 in-Active 상태를 거쳐간다.
 
-
+-------------
 <br>
 
 - scene delegate에 대해 설명하시오.
+
+-------------
 <br>
 
 - UIApplication 객체의 컨트롤러 역할은 어디에 구현해야 하는가?
+
+-------------
 <br>
 
 - App의 Not running, Inactive, Active, Background, Suspended에 대해 설명하시오.
 
 Not running은 앱이 실행되지 않은 상태를 말하고 Inactive는 app이 실행중이지만 사용자로부터 event를 받을 수 없는 상태입니다. Active는 app이 실제 실행중이고 사용자 event를 받아서 상호작용할 수 있는상태이고 background는 홈화면으로 나가거나 다른 app으로 전환되어 app이 보이지 않는 곳에서 코드를 실행하고 있는 상태입니다.suspend는 앱이 background상태이며 앱이 메모리에 남아 있긴하나 코드를 실행하고 있지 않은 상태입니다.
 
-
+-------------
 <br>
 
 ###
 - NSOperationQueue 와 GCD Queue 의 차이점을 설명하시오.
 
-
+-------------
 <br>
 
 - GCD API 동작 방식과 필요성에 대해 설명하시오.
+
+-------------
 <br>
 
 - Global DispatchQueue 의 Qos 에는 어떤 종류가 있는지, 각각 어떤 의미인지 설명하시오.
@@ -145,30 +167,35 @@ main thread에서 작업, 사용자 인터페이스(UI) 새로고침 또는 애�
 작업이 신속하게 수행되지 않으면, UI가 중단된 상태로 표시될 수 있음
 반응성(responsiveness)과 성능(performance)에 중점을 둡니다.
 Duration of work to be performed - 순식간에 끝난다.(Work is virtually instantaneous.)
+
 2. userInitiated
 
 사용자가 시작한 작업이며, 저장된 문서를 열거나, 사용자 인터페이스에서 무언가를 클릭할 때 작업을 수행하는 것과 같은 즉각적인 결과가 필요
 사용자 상호작용을 계속하려면 작업이 필요합니다. (The work is required in order to continue user interaction) 반응성과 성능에 중점을 둡니다.
 Duration of work to be performed : 거의 순식간이며, 몇 초 또는 그 이하입니다.
+
 3. default
 
 QoS의 priority level은 user-initiated와 utility사이에
 이 QoS는 개발자가 작업을 분류하는데 사용하기 위한 것이 아님, QoS정보가 할당되지 않은 작업은 Default로 처리되며 GCD global queue는 이 level(default)에서 실행됩니다
+
 4. utility
 
 작업을 완료하는 데 약간의 시간이 걸릴 수 있으며, 데이터 다운로드 또는 import와 같은 즉각적인 결과가 필요하지 않음
 유틸리티 작업에는 일반적으로 사용자가 볼 수 있는 progress bar가 있음, 반응성, 성능 및 에너지 효율성 간에 균형을 유지하는 데 중점
+
 5. background
 
 백그라운드에서 작동하며, indexing, 동기화 및 백업과 같이 사용자가 볼 수 없는 작업
 에너지 효율성에 중점
 Duration of work to be performed : 작업은 분(minutes) 또는 시간(hour)과 같은 상당한 시간(significant time)이 걸림
+
 6. unspecified
 
 이는 QoS정보가 없음을 나타내며, 환경 QoS(environmental QoS)를 추론해야 한다는 단서를 시스템에 제공
 쓰레드가 기존(legacy) API를 사용하는 경우, Unspecified QoS를 사용할 수 있으며, 이경우 쓰레드가 QoS를 벗어날 수 있음
 
-
+-------------
 <br>
 
 ###
@@ -177,20 +204,25 @@ Duration of work to be performed : 작업은 분(minutes) 또는 시간(hour)과
 cocoa touch framework 가 UIKit을 포함하는데 이 UIKit이 사용자 인터페이스를 구성하는데에 필수적입니다.
 
 iOS기본구조
-coaoa touch
+
+1. coaoa touch
 
 앱의 다양한 기능구현에 필요
 다양한 핵심프레임워크를 포함하는 최상위 레벨 프레임워크
-media
+
+2. media
 
 그래픽 관련 서비스나 오디오나 비디오 같은 멀티미디어 관련 서비스 제공
-core services
+
+3. core services
 
 문자열 처리, 데이터 집합, 네트워크 등의 서비스 제공
-core os
+
+4. core os
 
 하드웨어와 네트워크 관련된 low-level의 서비스를 제공
 
+-------------
 <br>
 
 - Foundation Kit은 무엇이고 포함되어 있는 클래스들은 어떤 것이 있는지 설명하시오.
@@ -203,7 +235,7 @@ iterator: 배열이나 그와 유사한 자료 구조의 내부의 요소를 순
 jsonEncoder: 데이터 유형의 인스턴스에서 JSON 개체로 변환하는 객체
 jsonDecoder: JSON 개체에서 데이터 유형의 인스턴스로 변환하는 객체
 
-
+-------------
 <br>
 
 - Delegate란 무엇인지 설명하고, retain 되는지 안되는지 그 이유를 함께 설명하시오.
@@ -211,46 +243,96 @@ jsonDecoder: JSON 개체에서 데이터 유형의 인스턴스로 변환하는 
 delegate란 객체 지향 프로그래밍에서 하나의 객체가 모든 일을 처리하는 것이 아니라 처리해야 할 일 중 일부를 다른 객체에게 넘기는 것을 의미한다.
 
 retain(유지하다) : 메모리가 해제되지 않아서 낭비되는 현상을 의미 (Memory Leak, 메모리 누수)
+
 Delegate는 객체 간의 작업이여서 참조 값을 사용하기 때문에 retain 현상이 일어난다.
 
+<br>
+
 해결 방법
+
 weak : 약한 참조
+
 unowned : 약한 참조이고 해제된 메모리 영역에 재접근하지 않는다는 확신이 있을 때
 
+-------------
 <br>
 
 - NotificationCenter 동작 방식과 활용 방안에 대해 설명하시오.
+
+NotificationCenter는 등록된 모든 Observer에게 정보를 전달하는 메커니즘입니다. observer는 notification들을 감지하고 있고 sender는 필요할 때 해당 observer에게 notification들을 보내주는 역할을 합니다. 옵저버를 등록하고 등록된 옵저버를 감시하면서 변경사항이 발생하면 등록된 옵저버에게 알려줍니다.
+
+객체 A : listener
+
+객체 B : sender
+
+NotificationCenter
+
+1. 객체 A는 객체 B의 어떠한 행위를 관찰하기 위해 NotificationCenter에 옵저버를 등록한다.
+
+2. 옵저버에는 어떤 객체를 관찰할 것인지, 어떤 행위를 관찰할 것인지 등이 들어감
+
+3. 객체 A가 어떠한 행위를 한다.
+
+4. 객체 A는 알림을 생성하고 NotificationCenter에 post함
+
+5. NotificationCenter는 객체 B에게 등록한 옵저버에 대한 알림이 발생했다고 알려줌
+
+예를들어 한 화면에서 파일을 다운로드하고 다른 화면으로 넘어가도 다운로드 완료 알림 팝업을 띄울수 있습니다.
+
+
+-------------
 <br>
 
 - UIKit 클래스들을 다룰 때 꼭 처리해야하는 애플리케이션 쓰레드 이름은 무엇인가?
+
+main thread
+
+-------------
 <br>
 
 - App Bundle의 구조와 역할에 대해 설명하시오.
+
+애플리케이션 번들은 애플리케이션의 성공적인 작동에 필요한 모든것을 저장합니다.
+
+애플리케이션 번들은 앱의 코드를 포함하고 있는 실행 가능한 파일인 my app,
+앱을 표시하는 application icons,
+bundle ID, 버전 번호 등 앱에 대한 구성 정보를 포함하고 있는 파일인 info.plist,
+앱의 시작 인터페이스를 보여주는 이미지인 launch images,
+앱 런치 시간에 앱을 로드하기 위한 기본 인터페이스 객체(App delegate 객체의 인스턴스)를 포함한 MainWindow.nib,
+기본 설정을 구성하고, 표시할 프로퍼티 리스트와 기타 리소스 파일이 포함되어있는 Settings.bundle,
+이미지나 사운드 및 애플리케이션에 필요한 기타 커스텀 데이터 파일로 구성된 커스텀 리소스 파일로 구성됩니다.
+
+-------------
 <br>
 
 - 모든 View Controller 객체의 상위 클래스는 무엇이고 그 역할은 무엇인가?
 
-
+-------------
 <br>
 
 - 자신만의 Custom View를 만들려면 어떻게 해야하는지 설명하시오.
 
+-------------
 <br>
 
 - View 객체에 대해 설명하시오.
 
+-------------
 <br>
 
 - UIView 에서 Layer 객체는 무엇이고 어떤 역할을 담당하는지 설명하시오.
 
+-------------
 <br>
 
 - UIWindow 객체의 역할은 무엇인가?
 
+-------------
 <br>
 
 - UINavigationController 의 역할이 무엇인지 설명하시오.
 
+-------------
 <br>
 
 - TableView를 동작 방식과 화면에 Cell을 출력하기 위해 최소한 구현해야 하는 DataSource 메서드를 설명하시오.
