@@ -22,6 +22,7 @@ iOS개발자들에게 필요한 자료들을 정리하고 있는 중입니다.
 
 ## iOS
 - Bounds 와 Frame 의 차이점을 설명하시오.
+
 Bounds와 Frame은 모두 CGRect 타입이며 origin 즉 원점을 나타내는 데이터와 size를 나타내는 데이터를 갖고있습니다.
 Bounds는 자신만의 좌표시스템에서의 View의 위치와 크기 값이고 origin은 디폴트로 (0,0)으로 설정되어 있으며 주로 View내부에 그림을 그릴 때 (drawRect) 사용합니다.
 Frame은 superView(한 단계 상위 뷰)의 좌표시스템안에서 view의 위치와 크기 값이고 주로 View의 위치나 크기를 설정하는 경우 사용합니다.
@@ -29,6 +30,8 @@ Frame은 superView(한 단계 상위 뷰)의 좌표시스템안에서 view의 �
 <br>
 
 - 실제 디바이스가 없을 경우 개발 환경에서 할 수 있는 것과 없는 것을 설명하시오.
+
+
 시뮬레이터는 Mac에서 실행되는 앱이기 때문에 CPU, 메모리 및 네트워크 연결을 비롯한 컴퓨터 리소스에 액세스할 수 있지만 실제 디바이스의 메모리 및 네트워크 속도와 다르기 때문에 실제 디바이스가 없다면 정확한 성능 테스트를 할 수 없습니다. 실제 맥에서는 부드럽게 실행되던 앱이 실제 디바이스로 테스트했을 때는 부드럽지 않을 수도 있습니다. 그리고 페이스 아이디를 이용할 때 직접 얼굴인식은 안되지만 인식됨, 안됨 처리를 해볼 수는 있습니다. 하드웨어 적으로는 가속도, 가압계, 주변광, GPS 등 여러 센서 기능을 이용할 수가 없습니다. 또한 카메라, 마이크, 전화 기능도 사용할 수 없고, 마우스로 시뮬레이터를 터치하기 때문에 두 손가락으로 하는 줌 아웃 등의 기능을 테스트 할 수 없습니다. API 측면에서도 Apple의 푸시 알림 받기와 보내기를 지원하지 않습니다.
 
 <br>
@@ -41,8 +44,6 @@ Core data
 
 - 앱 화면의 콘텐츠를 표시하는 로직과 관리를 담당하는 객체를 무엇이라고 하는가?
 
-<br>
-
 UIViewController
 UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 뷰의 사용자 상호 작용에 응답한다
@@ -50,7 +51,27 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 앱에서 다른 ViewController를 포함한 다른객체들과 조정을 한다
 데이터가 변경되면 뷰의 콘텐츠를 업데이트할 수 있다
 
+<br>
+
 - App thinning에 대해서 설명하시오.
+
+디바이스에 애플리케이션이 설치될때, 앱스토어와 운영체제가 디바이스에 맞게 설치되도록 설치 최적화 기술을 의미한다. 최소한의 디스크 사용과 빠른 다운로드가 가능하다
+
+1. 슬라이싱
+
+앱이 지원하는 여러 디바이스에 각각의 조각 애플리케이션 번들 생성, 해당 디바이스에 적합한 조각을 전달에 설치한다.
+개발자가 앱스토어 커넥트에 앱을 업로드 하면, 앱스토어에서 다양한 버전의 조각들을 생성하고 사용자가 가장 알맞는 조각을 다운로드 하게 해준다
+
+2. 비트코드
+
+기계 언어로 번역되기 전단계이다
+비트코드를 사용해서 업로드 하면 애플에서 애플리케이션을 다시 컴파일해서 앱 바이너리 생성한다
+비트코드를 사용하지 않아도, fat binary가 업로드 되기는 하지만 비트코드를 사용하면 다시 컴파일 할 때 최적화 할 수 있다
+
+3. 주문형 리소스
+
+필요할 때만 다운로드 받을 수 있다
+예를 들어 체험판 -> 본판 or 게임에서 저레벨에서 고레벨로 갈 때
 
 <br>
 
@@ -62,12 +83,36 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 <br>
 
 - 앱이 foreground에 있을 때와 background에 있을 때 어떤 제약사항이 있나요?
+
+Foreground에 있을 때에는 메모리 및 기타 시스템 리소스에 대해서 background보다 높은 우선순위를 가지며 시스템은 이러한 리소스를 사용할 수 있도록 필요에 따라 background 앱을 종료합니다
+Background에 있을 때에는 가능한 적은 메모리 공간을 사용해야하며 자원 할당에 있어 foreground 상태 보다 우선순위가 낮습니다
+
+
 <br>
 
 - 상태 변화에 따라 다른 동작을 처리하기 위한 앱델리게이트 메서드들을 설명하시오.
+
+상태변화에 따른 앱딜리게이트 메서드는,
+애플리케이션이 실행된 직후 사용자의 화면에 보여지기 직전에 호출 되는 application메서드가 있고,
+애플리케이션이 최초 실행될 때 호출되는 application 메서드,
+
+13.0이후 scenedelegate메서드로 바뀜..? (4가지)
+애플리케이션이 InActive 상태로 전환되기 직전에 호출되는 applicationWillResignActive,
+애플리케이션이 백그라운드 상태로 전환된 뒤 호출되는 applicationDidEnterBackground,
+애플리케이션이 Active상태가 되기 전에 호출되는 applicationWillEnterForeground,
+애플리케이션이 Active상태로 전환된 후 호출하는 applicationDidBecomeActive,
+
+애플리케이션이 종료되기 직전에 호출되는 applicationWillTerminate메서드 등이 있습니다.
+
+
 <br>
 
 - 앱이 In-Active 상태가 되는 시나리오를 설명하시오.
+
+전화나 메시지 같은 인터럽트가 발생하거나, 미리알림 같은 특정 알림창이 화면을 덮어서 앱이 실질적으로 event를 받지 못하는 상태 In-Active 상태가 된다.
+앱을 처음켜거나, foreground에서 background, background에서 foreground 상태가 될 때도 in-Active 상태를 거쳐간다.
+
+
 <br>
 
 - scene delegate에 대해 설명하시오.
@@ -77,10 +122,15 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 <br>
 
 - App의 Not running, Inactive, Active, Background, Suspended에 대해 설명하시오.
+
+Not running은 앱이 실행되지 않은 상태를 말하고 Inactive는 app이 실행중이지만 사용자로부터 event를 받을 수 없는 상태입니다. Active는 app이 실제 실행중이고 사용자 event를 받아서 상호작용할 수 있는상태이고 background는 홈화면으로 나가거나 다른 app으로 전환되어 app이 보이지 않는 곳에서 코드를 실행하고 있는 상태입니다.suspend는 앱이 background상태이며 앱이 메모리에 남아 있긴하나 코드를 실행하고 있지 않은 상태입니다.
+
+
 <br>
 
 ###
 - NSOperationQueue 와 GCD Queue 의 차이점을 설명하시오.
+
 
 <br>
 
@@ -88,17 +138,85 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 <br>
 
 - Global DispatchQueue 의 Qos 에는 어떤 종류가 있는지, 각각 어떤 의미인지 설명하시오.
+
+1. userInteractive
+
+main thread에서 작업, 사용자 인터페이스(UI) 새로고침 또는 애니메이션 수행과 같이 사용자와 상호작용 하는 작업
+작업이 신속하게 수행되지 않으면, UI가 중단된 상태로 표시될 수 있음
+반응성(responsiveness)과 성능(performance)에 중점을 둡니다.
+Duration of work to be performed - 순식간에 끝난다.(Work is virtually instantaneous.)
+2. userInitiated
+
+사용자가 시작한 작업이며, 저장된 문서를 열거나, 사용자 인터페이스에서 무언가를 클릭할 때 작업을 수행하는 것과 같은 즉각적인 결과가 필요
+사용자 상호작용을 계속하려면 작업이 필요합니다. (The work is required in order to continue user interaction) 반응성과 성능에 중점을 둡니다.
+Duration of work to be performed : 거의 순식간이며, 몇 초 또는 그 이하입니다.
+3. default
+
+QoS의 priority level은 user-initiated와 utility사이에
+이 QoS는 개발자가 작업을 분류하는데 사용하기 위한 것이 아님, QoS정보가 할당되지 않은 작업은 Default로 처리되며 GCD global queue는 이 level(default)에서 실행됩니다
+4. utility
+
+작업을 완료하는 데 약간의 시간이 걸릴 수 있으며, 데이터 다운로드 또는 import와 같은 즉각적인 결과가 필요하지 않음
+유틸리티 작업에는 일반적으로 사용자가 볼 수 있는 progress bar가 있음, 반응성, 성능 및 에너지 효율성 간에 균형을 유지하는 데 중점
+5. background
+
+백그라운드에서 작동하며, indexing, 동기화 및 백업과 같이 사용자가 볼 수 없는 작업
+에너지 효율성에 중점
+Duration of work to be performed : 작업은 분(minutes) 또는 시간(hour)과 같은 상당한 시간(significant time)이 걸림
+6. unspecified
+
+이는 QoS정보가 없음을 나타내며, 환경 QoS(environmental QoS)를 추론해야 한다는 단서를 시스템에 제공
+쓰레드가 기존(legacy) API를 사용하는 경우, Unspecified QoS를 사용할 수 있으며, 이경우 쓰레드가 QoS를 벗어날 수 있음
+
+
 <br>
 
 ###
 - iOS 앱을 만들고, User Interface를 구성하는 데 필수적인 프레임워크 이름은 무엇인가?
 
+cocoa touch framework 가 UIKit을 포함하는데 이 UIKit이 사용자 인터페이스를 구성하는데에 필수적입니다.
+
+iOS기본구조
+coaoa touch
+
+앱의 다양한 기능구현에 필요
+다양한 핵심프레임워크를 포함하는 최상위 레벨 프레임워크
+media
+
+그래픽 관련 서비스나 오디오나 비디오 같은 멀티미디어 관련 서비스 제공
+core services
+
+문자열 처리, 데이터 집합, 네트워크 등의 서비스 제공
+core os
+
+하드웨어와 네트워크 관련된 low-level의 서비스를 제공
+
 <br>
 
 - Foundation Kit은 무엇이고 포함되어 있는 클래스들은 어떤 것이 있는지 설명하시오.
+
+Foundation Kit은 Cocoa Touch framework에 포함되어 있는 프레임워크 중 하나로 String, Int 등의 원시 데이터 타입과 컬렉션 타입 및 운영체제 서비스를 사용해 앱의 기본적인 기능을 관리하는 프레임워크 입니다.
+
+iterator, jsonEncoder, jsonDecoder 과 같은 데이터 관련 클래스가 정의되어 있습니다.
+
+iterator: 배열이나 그와 유사한 자료 구조의 내부의 요소를 순회(traversing)하는 객체이다.
+jsonEncoder: 데이터 유형의 인스턴스에서 JSON 개체로 변환하는 객체
+jsonDecoder: JSON 개체에서 데이터 유형의 인스턴스로 변환하는 객체
+
+
 <br>
 
 - Delegate란 무엇인지 설명하고, retain 되는지 안되는지 그 이유를 함께 설명하시오.
+
+delegate란 객체 지향 프로그래밍에서 하나의 객체가 모든 일을 처리하는 것이 아니라 처리해야 할 일 중 일부를 다른 객체에게 넘기는 것을 의미한다.
+
+retain(유지하다) : 메모리가 해제되지 않아서 낭비되는 현상을 의미 (Memory Leak, 메모리 누수)
+Delegate는 객체 간의 작업이여서 참조 값을 사용하기 때문에 retain 현상이 일어난다.
+
+해결 방법
+weak : 약한 참조
+unowned : 약한 참조이고 해제된 메모리 영역에 재접근하지 않는다는 확신이 있을 때
+
 <br>
 
 - NotificationCenter 동작 방식과 활용 방안에 대해 설명하시오.
