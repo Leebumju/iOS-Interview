@@ -83,10 +83,30 @@ UIKit 앱의 뷰 계층 구조를 관리하는 객체이다
 ###
 - 앱이 시작할 때 main.c 에 있는 UIApplicationMain 함수에 의해서 생성되는 객체는 무엇인가?
 
+@UIApplicationMain: 코코아 터치 프레임워크에서 앱의 라이프 사이클을 시작하는 함수
+
+앱 실행과정
+object-c
+1.앱이 실행되면서 맨 처음 main()함수가 실행된다
+2.main()함수는 UIApplicationMain()함수를 호출한다
+3.UIApplicationMain()함수가 UIApplication객체를 생성한다. 이 객체는 앱의 본체에 해당.
+4.UIApplication객체는 info.plist 파일로부터 앱 구성에 필요한 정보들을 로드한다.
+5.이벤트 루프 및 초기설정을 진행한다.
+6.실행 완료 직전에 앱 델리게이트의 application(_:didFinishLaunchingWithOptions:)메소드가 호출된다.
+
+swift : 스위프트는 main 함수가 없지만 @main 이라는 어노테이션 표기가 있다. 이 표기를 통해서 object-c의 1-5 과정이 대체된다
+
+@main 어노테이션을 찾고 그 클래스를 실행한다
+AppDelegate클래스의 application(:didFinishLaunchingWithOptions:)메소드를 호출한다(앱이 실행될때 처리할 내용이 있으면 여기에 작성)
+이벤트루프 실행, 작성한 코드들이 실행
+앱이 종료될때 앱에대한 메모리 제거를 위해서 pplicationWillTerminate(:)메소드를 호출(앱이 종료될떄 처리할 내용이 있으면 어기에 작성)
+
 -------------
 <br>
 
 - @Main에 대해서 설명하시오.
+
+@main은 프로그램 실행 시작 시 진입점으로 타입을 지정하기 위한 Swift 언어의 기능이다. 사용자는 탑 레벨의 코드를 작성하는 대신 @main단일 유형의 속성을 사용할 수 있고, 라이브러리와 프레임워크는 프로토콜이나 클래스 상속을 통해 맞춤형 진입점 동작을 제공할 수 있다. 
 
 -------------
 <br>
@@ -133,10 +153,19 @@ Background에 있을 때에는 가능한 적은 메모리 공간을 사용해야
 
 - scene delegate에 대해 설명하시오.
 
+iOS13 이후 UI 생명주기에 관한 이벤트를 처리하기 위해 사용하는 객체입니다.
+앱을 실행하면 UIKit이 일반적으로 UIScene의 서브클래스인  UIWindowScene 객체를 생성합니다.
+즉,  SceneDelegate란 UI 상태에 따른 이벤트처리를 하기 위한 객체입니다.
+
+
+
 -------------
 <br>
 
 - UIApplication 객체의 컨트롤러 역할은 어디에 구현해야 하는가?
+
+UIApplicationMain 함수
+
 
 -------------
 <br>
@@ -151,10 +180,56 @@ Not running은 앱이 실행되지 않은 상태를 말하고 Inactive는 app이
 ###
 - NSOperationQueue 와 GCD Queue 의 차이점을 설명하시오.
 
+NSOperationQueue
+
+Objective-C 기반 고수준 API
+GCD보다 약간의 오버헤드가 더 발생되고 느리다. But KVO 지원 및 작업취소등을 지원
+다양한 작업들 중에서 의존성을 추가할 수 있다
+재사용, 취소, 중지 가능하다
+NSOperation을 만들어서 병렬 or 직렬로 스레드 풀을 사용가능하다.
+GCD Queue
+
+C기반 로우레벨의 API
+Global Queue에서 QOS 우선순위를 줄 수 있다.
+Main Queue: 메인 스레드에서 사용될 것 들을 처리, UI코드
+Dispatch Queues: 디스패치 큐는 FIFO 순서로 작업을 실행시키는 역할을 담당
+Serial Dispatch Queue: 시리얼 디스패치 큐는 한번에 한 작업만 실행
+Concurrent Dispatch Queue: 컨커런트 디스패치 큐는 시작한 작업이 끝나는것을 기다리지 않고 가능한 많은 작업을 실행
+Main Dispatch Queue: 앱의 메인 스레드에서 작업을 실행할 수있는 전역에서 사용가능한 시리얼 큐
+
 -------------
 <br>
 
 - GCD API 동작 방식과 필요성에 대해 설명하시오.
+
+GCD (Grand Central Dispatch)
+백그라운드에서 스레드를 관리하면서 작업을 실행시키는 저수준 API를 제공하는 라이브러리
+
+Dispatch Queue : FIFO 순서로 작업을 실행
+Serial Dispatch Queue : 한 번에 한 작업만 실행
+Concurrent Dispatch Queue : 작업이 끝나는 것을 기다리지 않고 가능한 많은 작업 실행 (병렬)
+Main Dispatch Queue : 앱의 메인 스레드에서 작업할 수 있는 전역에서 사용 가능한 시리얼 큐
+DispatchQueue Class
+Task를 담아두면 선택된 스레드에서 실행
+
+Serial Dispatch Queue : 등록된 작업을 한 번에 하나씩 처리한다. 처리 중인 작업이 완료되면 다음 작업을 실행한다.
+Concurrent Dispatch Queue : 여러 작업을 동시에 처리한다.
+앱이 실행될 때의 Queue
+Main Queue : 메인 스레드(UI 스레드)에서 사용되는 Serial Queue. 모든 UI 처리는 메인 스레드에서 처리한다.
+Global Queue : 편의상 사용할 수 있게 만들어 놓은 Concurrent Queue. 처리 우선순위를 위한 qos (quality of service) 파라미터를 제공해 병렬적으로 동시에 처리한다.
+=> 작업 완료 순서를 정할 수는 없지만, 우선적으로 일을 처리하게 할 수는 있다.
+sync : 동기
+async : 비동기. 네트워크, 파일 I/O 등의 시간이 많이 소요되는 작업에 사용한다.
+serial/concurrent와 sync/async는 관련이 없다
+
+serial과 concurrent는 한 번에 하나만 작업하는지 여러개를 작업하는지의 차이이고,
+
+sync와 async는 처리가 끝날 때까지 기다리는지 기다리지 않는지의 차이이다.
+
+✨필요성
+간단한 비동기 작업의 경우 NSOperationQueue보다 GCD를 쓰는 것이 구현이 쉽다.
+
+NSOperationQueue보다 빠르고 오버헤드가 적기 때문에 복잡한 로직이 아니면 GCD를 사용하는 것이 편하다.
 
 -------------
 <br>
