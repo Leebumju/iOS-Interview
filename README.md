@@ -382,47 +382,159 @@ bundle ID, 버전 번호 등 앱에 대한 구성 정보를 포함하고 있는 
 
 - 모든 View Controller 객체의 상위 클래스는 무엇이고 그 역할은 무엇인가?
 
+모든 View Controller는 UIViewController를 상속받습니다. UIViewController는 모든 View Controller에 공통으로 작동하는 행동들이 정의 되있고, 이를 상속받아 메서드를 추가하거나 override할 수 있습니다.
+
 -------------
 <br>
 
 - 자신만의 Custom View를 만들려면 어떻게 해야하는지 설명하시오.
+
+1. Xib 이용해서 별도의 Storyboard처럼 관리 가능
+
+Xib을 생성하고 또한 별도의 UIView을 상속받은 Class을 생성한다. 그리고 Xib에서 owner로 해당 클래스를 임명하고 커스텀 클래스 내에서 초기화 시, Xib 파일을 불러와 view로 임명하는 코드 추가를 하고 원하는 작업들을 Storyboard와 동일하게 수행하면 된다.
+2. UIView을 상속해서 코드로만 구현
+
+UIView을 상속받는 클래스를 생성해 정말 코드로만 원하는 작업들을 설정합니다.
 
 -------------
 <br>
 
 - View 객체에 대해 설명하시오.
 
+화면에 content 표시, 그리기 및 애니메이션, 오토레이아웃, 제스처 인식 등 화면에 관한 것들을 담당하는 객체입니다. view는 사용자 인터페이스의 기본 구성 요소이며 모든 조작은 main thread에서 해야합니다.
+
 -------------
 <br>
 
 - UIView 에서 Layer 객체는 무엇이고 어떤 역할을 담당하는지 설명하시오.
+
+UIView
+- 화면의 직사각형 모양을 관리하는 객체로, 앱이 사용자와 상호작용하는 주요 방법입니다.
+- UIView는 객체에 나타나는 콘텐츠들을 관리하는 CALayer 타입의 Layer를 가지고 있습니다.
+
+- UIView는 이미지나 애니메이션들을 직접 제어하지 않고, View에게 작업을 위임합니다.
+
+ 
+
+Layer
+- Core Animation 클래스인 CALayer 타입입니다.
+
+- UIView에게 작업을 전달받는 View는 Core Animation 클래스의 CALayer Layer객체에서 직접 작업을 수행합니다.
+
+- 주로 뷰 위의 콘텐츠, 애니메이션을 그리는, 시각적 행위의 작업을 담당합니다.
+
+- 자세하게는 그림자, 테두리, 3D 변형, 마스킹, 애니메이션, 등의 작업을 처리합니다.
+
+- 유연한 커스터 마이징이 가능하다는 특징이 있습니다.
 
 -------------
 <br>
 
 - UIWindow 객체의 역할은 무엇인가?
 
+윈도우는 UIView의 자식 클래스이며 뷰의 계층 구조에서 최상의 뷰의 역할을 하며 뷰들을 담는 컨테이너 역할을 합니다.
+코드로 화면을 구현할 때에는 window를 직접생성해야하며
+스토리보드를 통해 화면을 구현할 경우에는 window가 자동으로 생성됩니다.
+
 -------------
 <br>
 
 - UINavigationController 의 역할이 무엇인지 설명하시오.
+
+네이게이션 스택을 사용하여 뷰컨트롤러를 순차적으로 보여주는 역할을 합니다.
 
 -------------
 <br>
 
 - TableView를 동작 방식과 화면에 Cell을 출력하기 위해 최소한 구현해야 하는 DataSource 메서드를 설명하시오.
 
+TableView의 동작 방식
+TableView는 프로토타입 셀을 통해 셀들을 구성하게 됩니다. 프로토타입 셀이란 개발자가 임의로 지정하여 테이블뷰 안에서 사용할 셀들의 예시라고 생각하시면 됩니다. 따라서 테이블 뷰를 구현하기 위해서는 어떠한 셀들을 사용하고 어떻게 배치 할 것인지 구현해주어야 합니다. 이러한 구현을 하기위해서는 DataSource와 Delegate를 채택하여 구현한 객체에게 TableView가 이러한 권한을 위임해주어야 합니다.
+
+DataSource Method
+func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+
 <br>
 
 - 하나의 View Controller 코드에서 여러 TableView Controller 역할을 해야 할 경우 어떻게 구분해서 구현해야 하는지 설명하시오.
+
+tableview 메서드에서 매개변수로 받은 tableView가 원하는 tableView가 맞는지 구분해서 구현하면 됩니다. tag를 등록하여 구분하는 방법도 있습니다.
 
 <br>
 
 - setNeedsLayout와 setNeedsDisplay의 차이에 대해 설명하시오.
 
+setNeedsLayout과 setNeedsDisplay 이름은 비슷한데 어떤 차이점이 있을까?
+
+애플공식문서를 참고하였습니다. 오역된 부분이 있을 수 있습니다. 참고해주세요😀
+
+이 두 메소드를 비교하기 전에 main run loop부터 알아봅시다.
+
+1. main run loop
+기기에서 앱아이콘을 터치하게 되면 @main 을 찾아 UIApplication객체와 AppDelegate객체를 생성합니다. 그리고는 이내 main run loop가 실행됩니다. main run loop는 터치 이벤트, 위치의 변화, 디바이스의 회전 등의 각종 이벤트들을 처리하게 됩니다. 이러한 처리 과정은 각 이벤트들에 알맞는 핸들러를 찾아 그들에게 권한을 처리 권한을 위임하며 진행됩니다.
+발생한 이벤트들을 모두 처리하고 권한이 다시 main run loop로 돌아오는 시점을 update cycle이라고 합니다.
+update cycle
+
+main run loop에서 이벤트가 처리되는 과정에서 버튼을 누르면 크기나 위치가 이동하는 애니메이션과 같이 layout이나 position 값을 바꾸는 핸들러가 실행될 때도 있습니다. 이러한 변화는 즉각적으로 반영되는 것이 아닙니다.
+시스템은 이러한 layout이나 position이 변화되는 View를 체크합니다. 그리고 모든 핸들러가 종료되고 main run loop로 권한이 다시 돌아오는 시점인 update cycle에서 이런 View들의 값을 바꿔주어 position이나 layout의 변화를 적용시킵니다.
+이러한 시간차가 존재하는것을 인지해야 setNeedsLayout를 쉽게 이해할 수 있습니다.
+
+2.layoutSubViews()
+layoutSubviews는 UIView의 인스턴스 메소드입니다. 이 메소드가 호출되면 해당 view와 subView들이
+모두 연달아 호출됩니다. 이는 비용이 많이 들기 때문에 직접 호출하는것은 지양해야 합니다. 이 메소드는 view의 값이 재계산되어야하는 적절한 시점에 시스템에 의해 자동으로 호출됩니다.
+추가로 UIViewController내의 view가 layoutSubviews() 메소드를 호출하게 되면 값이 갱신되고 이후 UIViewController의 viewDidLayoutSubviews()가 호출됩니다. 갱신된 view의 값에 의존하는 행위들은 이 메소드 내에 명시해줘야 합니다.
+
+다음과 같은 상황에서는 시스템이 자동으로 size 혹은 position이 변경되야하는 view라고 체크를 하고 update cycle에서는 layoutSubviews()가 호출되어 체크된 view들의 변경사항을 반영합니다.
+
+view의 크기를 조절할 때
+Subview를 추가할 때
+사용자가 UIScrollView를 스크롤할 때
+기기를 회전할 때
+view의 autolayout constraint값을 변경할 때
+위에 나열된 시점에는 자동으로 update cycle에서 layoutSubviews()를 호출하는 행위를 예약하는 것입니다. 그렇다면 수동으로 예약하려면 어떻게 해야할까요?
+이제 setNeedsLayout가 나옵니다.
+
+3. setNeedsLayout
+Invalidates the current layout of the receiver and triggers a layout update during the next update cycle.
+
+Declaration
+func setNeedsLayout()
+
+Discussion
+뷰의 하위 뷰들의 레이아웃을 조정하고 싶을 때 메인스레드에서 이 메소드를 호출하세요. 이 메소드는 요청을 기록하고 즉시 반환합니다. 왜냐하면 이 메소드는 강제로 즉시 업데이트하지 않고 다음 업데이트 주기를 기다리기 때문에 여러 뷰들이 업데이트 되기 전에 여러 뷰들의 레이아웃을 무효화 시킬 수 있습니다. 이 동작을 통해 모든 레이아웃 업데이트를 하나의 업데이트 주기로 통합할 수 있으며 일반적으로는 성능이 더 좋습니다.
+
+이 메소드를 호출한 view는 재계산이 필요한 view라고 시스템에게 알려주며 이후 update cycle에서 layoutSubviews()가 호출됩니다.
+
+setNeedsLayout메소드와 setNeedsDisplay메소드를 비교하였지만 이름만 비슷하지 행동은 전혀 다릅니다.
+
+4. setNeedsDisplay
+
+Declaration
+func setNeedsDisplay()
+
+Discussion
+이 메소드 혹은 setNeedsDisplay(_:)를 사용하여 view의 컨텐츠를 다시 그려야한다고 시스템에게 알려줄 수 있습니다. 이 메소드는 요청을 기록하고 즉시 반환합니다. view는 다음 드로잉 주기가 오기 전까지는 그려지지 않습니다. 다시말해 모든 view가 업데이트 되야 다시 그려집니다.
+setNeedsDisplay가 호출 된 후 다음 업데이트 주기가 되고 draw메소드가 호출 될 때 해당 뷰의 업데이트들이 한번에 이뤄집니다.
+
+CAEAGLLayer 객체를 사용하는 경우, 이 메소드는 효과가 없다고 합니다.
+
+컨텐츠의 내용이나 모양이 변경될 때만 다시 그려질수있도록 이 메소드를 호출해야 합니다. 만약 view의 기하학적인 부분만 변한다면 view는 다시 그려지지 않습니다. 이 때는 메소드 호출 대신 contentMode속성을 변형하여 사용합니다.
+
+정리
+setNeedsLayout()메소드와 setNeedsDisplay() 메소드 모두 호출 즉시 실행되지 않고 다음 update cycle에 변경사항이 적용됩니다. setNeedsLayout은 layoutSubview메소드를, setNeedsDisplay는 draw메소드를 시스템이 호출하게끔 유도한다. setNeedsLayout()메소드는 모든 핸들러가 종료되고 권한이 main run loop로 돌아오는 시점에 view의 position이나 layout에 관한 변화를 적용시키고 setNeedsDisplay()메소드는 다음 드로잉 사이클이 오면 그 때 쌓여있는 그려야할 컨텐츠들을 동시에 적용시킵니다.
+
+
 <br>
 
 - stackView의 장점과 단점에 대해서 설명하시오.
+
+스택뷰(StackView)는 View 들을 일정한 간격으로 배치하기 위해 사용합니다. StackView를 배치한 후 그 내부에 View들을 추가하여 사용하면 됩니다.
+
+물론, View 사이의 관계는 Constraint로도 설계할 수 있지만 Stack View를 이용하면 보다 편하게 배치할 수 있습니다.
+
+Horizontal Stack View : View 들을 가로로 배치한다.
+Vertical Stack View : View 들을 세로로 배치한다.
 
 <br>
 
@@ -430,18 +542,47 @@ bundle ID, 버전 번호 등 앱에 대한 구성 정보를 포함하고 있는 
 
 - NSCache와 딕셔너리로 캐시를 구성했을때의 차이를 설명하시오.
 
+딕셔너리는 메모리가 부족하면 값을 삭제하는 코드를 작성해야 하지만 NSCache는 메모리가 자동으로 관리된다.
+NSCache 는Thread-safe하다. 데이터를 쓸때마다 lock을 해줄 필요가 없다.
+
 <br>
 
 - URLSession에 대해서 설명하시오.
+
+URLSession은 앱과 서버 간 데이터를 주고 받는 API를 제공하는 클래스입니다.
+HTTP를 포함한 몇 가지 프로토콜을 지원하고 인증, 쿠키 관리, 캐시 관리 등도 지원합니다.
+URL Loading System에서 알아봤듯이 URLSession은 자체적으로 비동기적으로 동작하기 때문에 따로 비동기 처리할 필요가 없습니다.
 
 <br>
 
 - prepareForReuse에 대해서 설명하시오.
 
+테이블 뷰를 사용할때 보통 셀을 재사용하는 경우가 대부분일 것이다.
+셀을 말그대로 재사용하기 때문에 재사용된 셀에서 보여주지 않아야 하는 텍스트 혹은 버튼 등이 보여지는 경우가 있다.
+
+말 그대로 재사용했기 때문이다.
+
+예로 들어 생각해보자.
+
+테이블 뷰가 있고 해당 화면에서는 하나의 재사용 셀들이 주르륵 있다.
+현재 보여지는 화면으로부터 스크롤을 해서 아래의 셀들이 보여지고 그 셀들 또한 모두 재사용이 되고 있다.
+셀은 재사용이 되었지만, 셀 안에 들어가는 데이터의 조건은 각각 다를 수 있다.
+그러나 셀은 재사용이 되었기 때문에 원치 않는 정보가 들어가질 수 있다.
+
+셀 그 자체는 안의 데이터가 어떤것이라는것과는 무관하게
+셀 안에 레이블이 들어간다면 그 레이블을 띄워주는 그 자체의 행위만 하기 때문이다.
+
+그렇기 때문에 이렇듯 재사용 셀을 사용할 때는 반드시 모든 값이 초기화 되어져야 한다.
+그리고 이렇게 초기화를 하기 위해 호출하는 함수가 prepareForReuse이다.
+
 <br>
 
 - 다크모드를 지원하는 방법에 대해 설명하시오.
-
+1. 시스템 컬러를 사용할 경우 Semantic color를 이용해 다른 컬러가 표현된다.
+2. Assets를 이용해서 지원한다.
+2.1 모드 별로 다른 색을 정의
+2.2 모드 별로 다른 이미지를 정의
+3. 코드로 지원한다.
 <br>
 
 - ViewController의 생명주기를 설명하시오.
