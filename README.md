@@ -409,23 +409,18 @@ UIView을 상속받는 클래스를 생성해 정말 코드로만 원하는 작�
 - UIView 에서 Layer 객체는 무엇이고 어떤 역할을 담당하는지 설명하시오.
 
 UIView
-- 화면의 직사각형 모양을 관리하는 객체로, 앱이 사용자와 상호작용하는 주요 방법입니다.
-- UIView는 객체에 나타나는 콘텐츠들을 관리하는 CALayer 타입의 Layer를 가지고 있습니다.
-
-- UIView는 이미지나 애니메이션들을 직접 제어하지 않고, View에게 작업을 위임합니다.
+화면의 직사각형 모양을 관리하는 객체로, 앱이 사용자와 상호작용하는 주요 방법입니다.
+UIView는 객체에 나타나는 콘텐츠들을 관리하는 CALayer 타입의 Layer를 가지고 있습니다.
+UIView는 이미지나 애니메이션들을 직접 제어하지 않고, View에게 작업을 위임합니다.
 
  
 
 Layer
-- Core Animation 클래스인 CALayer 타입입니다.
-
-- UIView에게 작업을 전달받는 View는 Core Animation 클래스의 CALayer Layer객체에서 직접 작업을 수행합니다.
-
-- 주로 뷰 위의 콘텐츠, 애니메이션을 그리는, 시각적 행위의 작업을 담당합니다.
-
-- 자세하게는 그림자, 테두리, 3D 변형, 마스킹, 애니메이션, 등의 작업을 처리합니다.
-
-- 유연한 커스터 마이징이 가능하다는 특징이 있습니다.
+Core Animation 클래스인 CALayer 타입입니다.
+UIView에게 작업을 전달받는 View는 Core Animation 클래스의 CALayer Layer객체에서 직접 작업을 수행합니다.
+주로 뷰 위의 콘텐츠, 애니메이션을 그리는, 시각적 행위의 작업을 담당합니다.
+자세하게는 그림자, 테두리, 3D 변형, 마스킹, 애니메이션, 등의 작업을 처리합니다.
+유연한 커스터 마이징이 가능하다는 특징이 있습니다.
 
 -------------
 <br>
@@ -587,15 +582,56 @@ URL Loading System에서 알아봤듯이 URLSession은 자체적으로 비동기
 
 - ViewController의 생명주기를 설명하시오.
 
+Life Cycle은 크게 두 종류로 구분된다.
+1. 앱 생명주기
+2. ViewController 생명주기
+
+ViewController의 생명주기
+1. init
+2. loadView
+3. viewDidLoad
+4. viewWillAppear
+5. viewDidAppear
+6. viewWillDisappear
+7. viewDidDisappear
+8. viewDidUnload
+
+
 <br>
 
 - TableView와 CollectionView의 차이점을 설명하시오.
+테이블뷰는 간단하고 보편적인 리스트를 만들어 보여줄 수 있는 반면, 컬렉션뷰는 특정한 모습으로 커스텀한 목록을 만들어 보여줄 수 있다
 
 <br>
 
 ## Autolayout
 
 - 오토레이아웃을 코드로 작성하는 방법은 무엇인가? (3가지)
+1. Anchor 사용하기
+
+myView.translatesAutoresizingMastIntoConstraints = false
+
+let margins = view.layoutMarginsGuide
+myView.leadingAnchor.constraint(equalTo: margins.leadingAnchor).active = true
+myView.trailingAnchor.constraint(equalTo: margins.trailingAnchor).active = true
+myView.heightAnchor.constraint(equalTo: myView.widthAnchor, multiplier: 2.0)
+
+2.LayoutConstraints 사용하기
+가독성이 떨어지는 단점이 있습니다.
+
+NSLayoutConstraint(item: myView, attribute: .leading, relatedBy: .Equal, toItem: view, attribute: .leadingMargin, multiplier: 1.0, constant: 0.0).isActive = true
+
+3. Visual Format 사용하기
+설명하고자 하는 레이아웃의 시각적인 표현을 제공하는 방식입니다. 읽을 수 있도록 설계되어 있으며 뷰는 대괄호로 표시되고 뷰간의 연결은 하이픈(또는 뷰들을 떨어뜨리는 숫자에 의해 두개의 분리된 하이픈)을 사용합니다
+
+let views = ["myView": myView]
+let formatString = "|-[myView]-|"
+let constraints = NSLayoutConstraint.constraintsWithVisualFormat(formatString, 
+    options: .AlignAllTop, 
+    metrics: nil, 
+    views: views)
+
+NSLayoutConstraint.activateConstraints(constraints)
 
 <br>
 
