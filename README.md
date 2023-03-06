@@ -784,6 +784,8 @@ https://sihyungyou.github.io/iOS-copy-on-write/
 
 - AnyObject에 대해 설명하시오.
 
+AnyObject는 모든 클래스 타입의 인스턴스를 나타낼 수 있는 프로토콜입니다. AnyObject로 선언 시, "클래스 타입"만 저장할 수 있습니다.
+
 <br>
 
 - Optional 이란 무엇인지 설명하시오.
